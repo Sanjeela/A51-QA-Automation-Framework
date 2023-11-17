@@ -11,17 +11,6 @@ import org.testng.annotations.Test;
  *
  */
 public class LoginTests extends BaseTest {
-    @Test
-    public void loginValidEmailPasswordTest(){
-        LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
-
-        loginPage.provideEmail("sanjeela.chitrakar@testpro.io");
-        loginPage.providePassword("te$t$tudent1");
-        loginPage.clickSubmit();
-
-        Assert.assertTrue(homePage.getUserAvatar().isDisplayed());
-    }
 
     /**
      * This method takes Login Data from Dataprovider and user Thread.sleep for wait along with Explicit Waits.
@@ -51,8 +40,8 @@ public class LoginTests extends BaseTest {
     public void loginValidEmailPassword() {
         //Steps 1
         navigateToLoginPage();
-        provideEmail("demo@class.com");
-        providePassword("te$t$tudent");
+        provideEmail("sanjeela.chitrakar@testpro.io");
+        providePassword("te$t$tudent1");
         clickSubmit();
         WebElement avatar = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[class='avatar']")));
         //WebElement avatar = driver.findElement(By.cssSelector("img[class='avatar']"));
@@ -77,7 +66,7 @@ public class LoginTests extends BaseTest {
     @Test
     public void loginValidEmailNoPassword() throws InterruptedException  {
         navigateToLoginPage();
-        provideEmail("demo@class.com");
+        provideEmail("sanjeela.chitrakar@testpro.io");
         clickSubmit();
         WebElement avatar = driver.findElement(By.cssSelector("img[class='avatar']"));
         //Expected Result
@@ -107,5 +96,31 @@ public class LoginTests extends BaseTest {
         }catch (Exception e){
             Reporter.log("Unable to login withexcel data for an unknown reason." +e);
         }
+    }
+
+    @Test
+    public void loginValidEmailPasswordTest(){
+        LoginPage loginPage = new LoginPage(driver);
+        HomePage homePage = new HomePage(driver);
+        loginPage.provideEmail("sanjeela.chitrakar@testpro.io");
+        loginPage.providePassword("te$t$tudent1");
+        loginPage.clickSubmit();
+        Assert.assertTrue(homePage.getUserAvatar().isDisplayed());
+    }
+
+    @Test
+    public void loginValidEmailPasswordTestByPageFactory(){
+        LoginPage loginPage = new LoginPage(driver);
+        HomePage homePage = new HomePage(driver);
+
+        loginPage.provideEmailToLogin("sanjeela.chitrakar@testpro.io")
+                .providePasswordToLogin("te$t$tudent1")
+                .clickSubmitBtnToLogin();
+
+        Assert.assertTrue(homePage.getUserAvatar().isDisplayed());
+    }
+
+    public void waitForAnElementToBeVisible(String cssLocator){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("")));
     }
 }

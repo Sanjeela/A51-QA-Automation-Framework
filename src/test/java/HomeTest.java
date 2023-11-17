@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pagesObjectModel.*;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class HomeTest extends BaseTest{
 
     //Test Starts Here
 
-    @Test
+   /* @Test
     public void playSongWithContextClick() throws InterruptedException {
 
     //Login
@@ -34,20 +35,56 @@ public class HomeTest extends BaseTest{
     //Assertion
         Assert.assertTrue(isSongPlaying());
 
-    }
+    }*/
 
     @Test
+    public void playSong() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver);
+        HomePage homePage = new HomePage(driver);
+        AllSongsPage songsPage =new AllSongsPage(driver);
+
+        //Login
+        loginPage.provideEmail("sanjeela.chitrakar@testpro.io");
+        loginPage.providePassword("te$t$tudent1");
+        loginPage.clickSubmit();
+
+        homePage.chooseAllSongsList();
+
+        songsPage.contextClickFirstSong();
+        songsPage.choosePlayOption();
+
+        //Assertion
+        Assert.assertTrue(songsPage.isSongPlaying());
+
+    }
+
+   /* @Test
     public void hoverOverPlayButton() throws InterruptedException {
         //Login
         provideEmail("sanjeela.chitrakar@testpro.io");
         providePassword("te$t$tudent1");
         clickSubmit();
-        Thread.sleep(2000);
-
+        //Thread.sleep(2000);
         //Hover
 
         //Assertions
         Assert.assertTrue(hoverPlay().isDisplayed());
+    }*/
+
+    @Test
+    public void hoverOverPlayBtn() throws InterruptedException {
+        //Login
+        LoginPage loginPage = new LoginPage(driver);
+        HomePage homePage = new HomePage(driver);
+
+        loginPage.provideEmail("sanjeela.chitrakar@testpro.io");
+        loginPage.providePassword("te$t$tudent1");
+        loginPage.clickSubmit();
+
+        Thread.sleep(2000);
+
+        //Assertions
+        Assert.assertTrue(homePage.hoverPlay().isDisplayed());
     }
 
     @Test
@@ -131,32 +168,10 @@ public class HomeTest extends BaseTest{
         }
     }
 
-    public WebElement hoverPlay()throws InterruptedException{
-       //WebElement play = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='play-btn']")));
-       WebElement play =driver.findElement(By.cssSelector("[data-testid='play-btn']"));
-        actions.moveToElement(play).perform();
-        return wait.until(ExpectedConditions.visibilityOf(play));
-    }
 
 
 
-    public void chooseAllSongsList(){
-       // wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li a.songs"))).click(); (this method can also be used)
-        WebElement AllSongsList = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li a.songs")));
-        AllSongsList.click();
-    }
 
-    public void contextClickFirstSong(){
-        WebElement firstSongElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".all-songs tr.song-item:nth-child(1)")));
-        actions.contextClick(firstSongElement).perform();
-    }
 
-    public void choosePlayOption(){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li.playback"))).click();
-    }
 
-    public boolean isSongPlaying(){
-        WebElement soundBarVisualizer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid= 'sound-bar-play']")));
-        return soundBarVisualizer.isDisplayed();
-    }
 }
