@@ -5,6 +5,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+
+import org.openqa.selenium.interactions.Actions;
+
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 import org.testng.annotations.*;
 
@@ -24,24 +31,43 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 
 public class BaseTest {
 
-    public WebDriver driver;
 
+    //DataProviders Start Here
     @DataProvider(name="LoginData")
     public Object[][] getDataFromDataProvider(){
         return new Object[][]{
-                {"demo@class.com", "te$t$tudent"},
+                {"sanjeela.chitrakar@testpro.io", "te$t$tudent1"},
                 {"invalidemail@class.com", "te$t$tudent"},
                 {"demo@class.com", "InvalidPassword"},
                 {"",""}
         };
     }
+
+
+
     @DataProvider(name="excel-data")
     public Object[][] excelDP() throws IOException{
         Object[][] arrObj = getExcelData("./src/test/resources/test.xlsx", "Sheet1");
         return arrObj;
     }
 
-    public String url = "https:qa.koel.app";
+
+    //DataProviders End Here
+
+
+    //References Start Here
+
+
+    public static WebDriver driver = null;
+    public static String url = null;
+
+    public static WebDriverWait wait = null;
+
+    public static Actions actions = null;
+
+
+    //References End Here
+
 
     @BeforeSuite
     static void setupClass() {
@@ -54,7 +80,11 @@ public class BaseTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+       // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver,Duration.ofSeconds(10));
+
+        actions = new Actions(driver);
+
         driver.manage().window().maximize();
         navigateToLoginPage(BaseURL);
 
@@ -71,21 +101,24 @@ public class BaseTest {
 
 
     public void provideEmail(String email){
-        WebElement emailField = driver.findElement(By.cssSelector("input[type='email']"));
+        //Instead of this:
+        //WebElement emailField = driver.findElement(By.cssSelector("input[type='email']"));
+        //Do this:
+        WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='email']")));
         emailField.clear();
         emailField.sendKeys(email);
 
     }
 
     public void providePassword(String password){
-        WebElement passwordField = driver.findElement(By.cssSelector("input[type='password']"));
+        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='password']")));
         passwordField.clear();
         passwordField.sendKeys(password);
 
     }
 
     public void clickSubmit(){
-        WebElement submit = driver.findElement(By.cssSelector("button[type='submit']"));
+        WebElement submit = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[type='submit']")));
         submit.click();
     }
 
@@ -120,5 +153,12 @@ public class BaseTest {
         return data;
     }
 
+    /**
+     * Helper methods Start here
+     */
+
+    /**
+     * Helper methods End here
+     */
 
 }
