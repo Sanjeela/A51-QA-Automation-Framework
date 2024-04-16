@@ -40,16 +40,15 @@ public class HomeTest extends BaseTest{
     @Test
     public void playSong() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
-        AllSongsPage songsPage =new AllSongsPage(driver);
-
         //Login
         loginPage.provideEmail("sanjeela.chitrakar@testpro.io");
         loginPage.providePassword("te$t$tudent1");
         loginPage.clickSubmit();
 
+        HomePage homePage = new HomePage(driver);
         homePage.chooseAllSongsList();
 
+        AllSongsPage songsPage =new AllSongsPage(driver);
         songsPage.contextClickFirstSong();
         songsPage.choosePlayOption();
 
@@ -75,13 +74,12 @@ public class HomeTest extends BaseTest{
     public void hoverOverPlayBtn() throws InterruptedException {
         //Login
         LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
-
         loginPage.provideEmail("sanjeela.chitrakar@testpro.io");
         loginPage.providePassword("te$t$tudent1");
         loginPage.clickSubmit();
 
         Thread.sleep(2000);
+        HomePage homePage = new HomePage(driver);
 
         //Assertions
         Assert.assertTrue(homePage.hoverPlay().isDisplayed());
@@ -167,11 +165,4 @@ public class HomeTest extends BaseTest{
             System.out.println(e.getText());
         }
     }
-
-
-
-
-
-
-
 }
