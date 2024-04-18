@@ -1,16 +1,43 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
+import pages.HomePage;
+import pages.LoginPage;
 
 public class LoginTests extends BaseTest {
+@Test
+    public void loginValidEmailPasswordTest(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.provideEmail("demo@class.com")
+        loginPage.providePassword("te$t$tudent");
+        loginPage.clickSubmit();
+
+        HomePage homePage = new HomePage(driver);
+
+        Assert.assertTrue(homePage.getUserAvatar().isDisplayed());
+
+    }
 
 
 
 
-    @Test(dataProvider = "LoginData")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /**  @Test(dataProvider = "LoginData")
     public void loginTests(String email, String password) throws InterruptedException {
         navigateToLoginPage();
         provideEmail(email);
@@ -22,7 +49,7 @@ public class LoginTests extends BaseTest {
 
 
 
-    }
+    }**/
 
     @Test
     public void loginValidEmailPassword() {
